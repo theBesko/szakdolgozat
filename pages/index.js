@@ -1,11 +1,11 @@
 import "bootstrap/dist/css/bootstrap.css";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue } from "firebase/database";
-import useSWR, { SWRConfig, isValidating, useSWRConfig } from "swr";
+import useSWR, { SWRConfig, useSWRConfig } from "swr";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 const API =
-  "https://buildapc-szakdolgozat-default-rtdb.europe-west1.firebasedatabase.app/pelda.json";
+  "https://buildapc-szakdolgozat-default-rtdb.europe-west1.firebasedatabase.app/DATABASE_ROOT.json";
 
 export async function getServerSideProps() {
   const repoInfo = await fetcher(API);
@@ -25,11 +25,10 @@ function Repo() {
   });
 
   const firebaseConfig = {
-    apiKey: "AIzaSyDP8ygSOzXzFq30cQXdxcRYFKJKFRRRS3",
-    authDomain: "buildapc-szakdolgozat.firebaseapp.com",
-    databaseURL:
-      "https://buildapc-szakdolgozat-default-rtdb.europe-west1.firebasedatabase.app/",
-    projectId: "buildapc-szakdolgozat",
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   };
 
   const app = initializeApp(firebaseConfig);
@@ -46,7 +45,7 @@ function Repo() {
 
   return (
     <>
-      <h1>{data["aa"]}</h1>
+      <h1>{data.placeholder}</h1>
     </>
   );
 }
