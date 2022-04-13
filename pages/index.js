@@ -17,6 +17,7 @@ function Home() {
   const reference = ref(database, `pelda/szai`);
   onValue(reference, (snap) => {
     const data = snap.val();
+    console.log(data);
   });
 
   return (
