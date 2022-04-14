@@ -5,15 +5,16 @@ import ComponentList from "../../components/componentList";
 import { genAPI, fetcher } from "../../global/global";
 import { useRouter } from "next/router";
 
-const API = "http://localhost:3000/api/";
+const API =
+  "https://buildapc-szakdolgozat-default-rtdb.europe-west1.firebasedatabase.app/DATABASE_ROOT/componentStorage/"; //"http://localhost:3000/api/";
 
 export async function getServerSideProps(context) {
   const { pcComponent } = context.query;
-  const repoInfo = await fetcher(API + pcComponent);
+  const repoInfo = await fetcher(API + pcComponent + ".json");
   return {
     props: {
       fallback: {
-        [API + pcComponent]: repoInfo,
+        [API + pcComponent + ".json"]: repoInfo,
       },
     },
   };
@@ -21,7 +22,7 @@ export async function getServerSideProps(context) {
 function Repo() {
   const router = useRouter();
   const { pcComponent } = router.query;
-  const { data, error } = useSWR(API + pcComponent, fetcher, {
+  const { data, error } = useSWR(API + pcComponent + ".json", fetcher, {
     refreshInterval: 1000,
   });
 
