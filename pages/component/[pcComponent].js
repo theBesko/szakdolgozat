@@ -2,10 +2,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
 import ComponentList from "../../components/componentList";
-import { genAPI, fetcher } from "../../global/global";
+import { API, fetcher } from "../../global/global";
 import { useRouter } from "next/router";
-
-const API = "https://buildapc-szakdolgozat.vercel.app/api/";
 
 export async function getServerSideProps(context) {
   const { pcComponent } = context.query;
