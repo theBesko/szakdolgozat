@@ -1,7 +1,8 @@
 import "bootstrap/dist/css/bootstrap.css";
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, onValue } from "firebase/database";
-import useSWR, { SWRConfig, useSWRConfig } from "swr";
+import useSWR, { SWRConfig } from "swr";
+import { app, database } from "../global/firebase";
+import { getDatabase, get, set, ref, child } from "firebase/database";
+import ComponentList from "../components/componentList";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 const API =
@@ -20,32 +21,16 @@ export async function getServerSideProps() {
 }
 
 function Repo() {
-  const { data, error, isValidating } = useSWR(API, fetcher, {
+  const { data, error } = useSWR(API, fetcher, {
     refreshInterval: 1000,
   });
-
-  const firebaseConfig = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    databaseURL: process.env.FIREBASE_DATABASE_URL,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const database = getDatabase();
-
-  // const reference = ref(database, `pelda/szai`);
-  // onValue(reference, (snap) => {
-  //   const data = snap.val();
-  //   console.log(data);
-  // });
 
   if (error) return <h1>ERROR</h1>;
   if (!data) return <h1>LOADING</h1>;
 
   return (
     <>
-      <h1>{data.placeholder}</h1>
+      <h1>{}</h1>
     </>
   );
 }
@@ -53,6 +38,7 @@ function Repo() {
 export default function Home({ fallback }) {
   return (
     <SWRConfig value={{ fallback }}>
+      <ComponentList />
       <Repo />
     </SWRConfig>
   );
