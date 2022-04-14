@@ -24,7 +24,7 @@ export default function ComponentListDropdown(props) {
 
   return (
     <DropdownButton
-      className={classes.penisz}
+      className={classes.penisz + " w-100"}
       id="dropdown-basic-button"
       title={current}
     >

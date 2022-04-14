@@ -27,7 +27,7 @@ export default function ComponentList(props) {
   }
 
   return (
-    <div>
+    <div className={classes.listDiv}>
       <ul className={classes.list}>{renderList}</ul>
     </div>
   );

@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import ComponentList from "../../components/ComponentList";
 import ComponentListDropdown from "../../components/ComponentListDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../../styles/pcComponent.module.scss";
 
 export async function getServerSideProps(context) {
   const { pcComponent } = context.query;
