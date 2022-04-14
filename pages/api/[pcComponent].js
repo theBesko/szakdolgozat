@@ -1,4 +1,4 @@
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import { fetcher } from "../../global/global";
 
 export default async function handler(req, res) {
   const { pcComponent } = req.query;

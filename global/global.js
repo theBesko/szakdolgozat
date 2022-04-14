@@ -1,4 +1,4 @@
-export const LANG = "en";
+export const LANG = "hu";
 
 export const fetcher = (url) => fetch(url).then((res) => res.json());
 

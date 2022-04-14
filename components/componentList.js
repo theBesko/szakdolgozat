@@ -1,6 +1,6 @@
-import "bootstrap/dist/css/bootstrap.css";
 import Link from "next/link";
 import { LANG } from "../global/global";
+import classes from "./ComponentList.module.scss";
 
 const list = [
   { component: "CPU_Cooler", hu: "Processzor hűtő", en: "CPU Cooler" },
@@ -20,16 +20,18 @@ list.sort((a, b) => (a[LANG] > b[LANG] ? 1 : b[LANG] > a[LANG] ? -1 : 0));
 const renderList = [];
 for (const i in list) {
   renderList.push(
-    <li key={`category${list[i].component}`}>
-      <Link href={`/component/${list[i].component}`}>{list[i][LANG]}</Link>
-    </li>
+    <Link href={`/component/${list[i].component}`}>
+      <li className={classes.listitem} key={`category${list[i].component}`}>
+        {list[i][LANG]}
+      </li>
+    </Link>
   );
 }
 
 export default function ComponentList() {
   return (
     <div>
-      <ul>{renderList}</ul>
+      <ul className={classes.list}>{renderList}</ul>
     </div>
   );
 }
