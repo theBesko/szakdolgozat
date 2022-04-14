@@ -1,8 +1,9 @@
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
-import ComponentList from "../../components/ComponentList";
 import { API, fetcher } from "../../global/global";
 import { useRouter } from "next/router";
+import Header from "../../components/Header";
+import ComponentList from "../../components/ComponentList";
 
 export async function getServerSideProps(context) {
   const { pcComponent } = context.query;
@@ -45,6 +46,7 @@ function Repo() {
 export default function ComponentPage({ fallback }) {
   return (
     <SWRConfig value={{ fallback }}>
+      <Header />
       <ComponentList />
       <Repo />
     </SWRConfig>

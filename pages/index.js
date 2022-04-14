@@ -25,7 +25,6 @@ function Repo() {
   if (error) return <h1>ERROR</h1>;
   if (!data) return <h1>LOADING</h1>;
 
-  //console.log(document.cookie);
   return (
     <>
       <h1>{data["CPU_Cooler"]["storage"]}</h1>
