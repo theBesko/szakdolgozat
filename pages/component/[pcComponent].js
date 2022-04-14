@@ -7,15 +7,25 @@ import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const { pcComponent } = context.query;
-  const repoInfo = await fetcher(API + pcComponent);
-  return {
-    props: {
-      fallback: {
-        [API + pcComponent]: repoInfo,
+  try {
+    const repoInfo = await fetcher(API + pcComponent);
+    return {
+      props: {
+        fallback: {
+          [API + pcComponent]: repoInfo,
+        },
       },
-    },
-  };
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 }
+
 function Repo() {
   const router = useRouter();
   const { pcComponent } = router.query;
