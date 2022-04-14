@@ -4,6 +4,8 @@ import { API, fetcher } from "../../global/global";
 import { useRouter } from "next/router";
 import Header from "../../components/Header";
 import ComponentList from "../../components/ComponentList";
+import ComponentListDropdown from "../../components/ComponentListDropdown";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export async function getServerSideProps(context) {
   const { pcComponent } = context.query;
@@ -13,6 +15,7 @@ export async function getServerSideProps(context) {
       props: {
         fallback: {
           [API + pcComponent]: repoInfo,
+          component: pcComponent,
         },
       },
     };
@@ -47,7 +50,8 @@ export default function ComponentPage({ fallback }) {
   return (
     <SWRConfig value={{ fallback }}>
       <Header />
-      <ComponentList />
+      <ComponentList component={fallback.component} />
+      <ComponentListDropdown component={fallback.component} />
       <Repo />
     </SWRConfig>
   );

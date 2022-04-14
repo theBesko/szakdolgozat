@@ -1,13 +1,32 @@
-.list{
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    width: 20rem;
-    color:black;
-    font-size: 26px;
+@media only screen and (max-width: 767px) {
+    .list{
+        display:none;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 20rem;
+        background-color: lightblue;
+        color:black;
+        font-size: 26px;
+}
 }
 
 .listitem:hover{
     cursor: pointer;
     background-color: rgb(201, 201, 201);
+}
+
+.listitemcurrent{
+    background: cyan
+}
+
+@media only screen and (min-width: 768px) {
+    .list{
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 20rem;
+        color:black;
+        font-size: 26px;
+    }
 }
