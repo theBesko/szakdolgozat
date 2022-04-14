@@ -20,10 +20,12 @@ list.sort((a, b) => (a[LANG] > b[LANG] ? 1 : b[LANG] > a[LANG] ? -1 : 0));
 const renderList = [];
 for (const i in list) {
   renderList.push(
-    <Link href={`/component/${list[i].component}`}>
-      <li className={classes.listitem} key={`category${list[i].component}`}>
-        {list[i][LANG]}
-      </li>
+    <Link
+      key={`category_${list[i].component}`}
+      href={`/component/${list[i].component}`}
+      passHref
+    >
+      <li className={classes.listitem}>{list[i][LANG]}</li>
     </Link>
   );
 }
