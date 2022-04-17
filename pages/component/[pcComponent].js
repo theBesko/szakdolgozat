@@ -1,4 +1,3 @@
-import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
 import { API, fetcher } from "../../global/global";
 import { useRouter } from "next/router";
@@ -7,6 +6,7 @@ import ComponentList from "../../components/ComponentList";
 import ComponentListDropdown from "../../components/ComponentListDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/pcComponent.module.scss";
+import { useEffect, useState } from "react";
 
 export async function getServerSideProps(context) {
   const { pcComponent } = context.query;
@@ -54,11 +54,17 @@ function Repo() {
 }
 
 export default function ComponentPage({ fallback }) {
+  const [lang, setLang] = useState([""]);
+
+  useEffect(() => {
+    setLang(localStorage.getItem("lang"));
+  }, []);
+
   return (
     <SWRConfig value={{ fallback }}>
       <Header />
-      <ComponentList component={fallback.component} />
-      <ComponentListDropdown component={fallback.component} />
+      <ComponentList lang={lang} component={fallback.component} />
+      <ComponentListDropdown lang={lang} component={fallback.component} />
       <Repo />
     </SWRConfig>
   );

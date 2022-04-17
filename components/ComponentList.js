@@ -1,11 +1,12 @@
 import classes from "./ComponentList.module.scss";
 import Link from "next/link";
-import { LANG, list } from "../global/global";
-
-list.sort((a, b) => (a[LANG] > b[LANG] ? 1 : b[LANG] > a[LANG] ? -1 : 0));
+import { list } from "../global/global";
 
 export default function ComponentList(props) {
+  const LANG = props.lang;
+
   const renderList = [];
+
   for (const i in list) {
     renderList.push(
       <Link

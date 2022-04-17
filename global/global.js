@@ -1,5 +1,3 @@
-export const LANG = "hu";
-
 export const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export const API =
@@ -19,3 +17,5 @@ export const list = [
   { component: "CPU", hu: "Processzor", en: "Processor" },
   { component: "SSD", hu: "SSD", en: "SSD" },
 ];
+
+//list.sort((a, b) => (a[LANG] > b[LANG] ? 1 : b[LANG] > a[LANG] ? -1 : 0));
