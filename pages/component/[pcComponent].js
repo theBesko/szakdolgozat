@@ -40,9 +40,15 @@ function Repo() {
   if (error) return <h1>ERROR</h1>;
   if (!data) return <h1>LOADING</h1>;
 
+  const array = [];
+
+  for (const i in data.storage) {
+    array.push(<h1 key={"com_" + i}>{data.storage[i]["id"]}</h1>);
+  }
+
   return (
     <>
-      <h1>{data.storage}</h1>
+      <div>{array}</div>
     </>
   );
 }

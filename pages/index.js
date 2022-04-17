@@ -27,7 +27,7 @@ function Repo() {
 
   return (
     <>
-      <h1>{data["CPU_Cooler"]["storage"]}</h1>
+      <h1>szia</h1>
     </>
   );
 }
