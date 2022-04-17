@@ -3,7 +3,7 @@ import Link from "next/link";
 import { list } from "../global/global";
 
 export default function ComponentList(props) {
-  const LANG = props.lang;
+  const LANG = props.lang ?? "hu";
 
   const renderList = [];
 

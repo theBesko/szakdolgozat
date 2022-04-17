@@ -4,7 +4,7 @@ import { list } from "../global/global";
 import classes from "./ComponentListDropdown.module.scss";
 
 export default function ComponentListDropdown(props) {
-  const LANG = props.lang;
+  const LANG = props.lang ?? "hu";
 
   const renderList = [];
 
