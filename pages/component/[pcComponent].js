@@ -50,8 +50,6 @@ function Repo(props) {
       : 0
   );
 
-  console.log(arraytosort);
-
   for (let i = page * 20 - 20; i < page * 20; i++) {
     if (i === data.storage.length) break;
     array.push(
