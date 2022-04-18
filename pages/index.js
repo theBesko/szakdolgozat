@@ -32,23 +32,10 @@ function Repo() {
   );
 }
 
-const lang = (lang) => (event) => {
-  console.log(document.cookie);
-  document.cookie = lang;
-  console.log(document.cookie);
-  //location.reload()
-};
-
 export default function Home({ fallback }) {
   return (
     <SWRConfig value={{ fallback }}>
       <Header />
-      <button className="btn btn-primary" onClick={lang("en")}>
-        EN
-      </button>
-      <button className="btn btn-primary" onClick={lang("hu")}>
-        HU
-      </button>
       <ComponentList />
       <Repo />
     </SWRConfig>

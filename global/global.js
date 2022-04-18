@@ -18,4 +18,9 @@ export const list = [
   { component: "SSD", hu: "SSD", en: "SSD" },
 ];
 
+export const lang = (lang) => (event) => {
+  localStorage.setItem("lang", lang);
+  location.reload();
+};
+
 //list.sort((a, b) => (a[LANG] > b[LANG] ? 1 : b[LANG] > a[LANG] ? -1 : 0));

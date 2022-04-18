@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 
 export async function getServerSideProps(context) {
   const { pcComponent } = context.query;
-  console.log(context.query);
   try {
     const repoInfo = await fetcher(API + pcComponent);
     return {
@@ -39,23 +38,30 @@ function Repo(props) {
     refreshInterval: 1000,
   });
 
-  if (error) return <h1>ERROR</h1>;
-  if (!data) return <h1>LOADING</h1>;
-
-  const array = [];
-
   const page = props.page;
+  const array = [];
+  const arraytosort = data.storage;
+
+  arraytosort.sort((a, b) =>
+    parseInt(a.price) > parseInt(b.price)
+      ? 1
+      : parseInt(b.price) > parseInt(a.price)
+      ? -1
+      : 0
+  );
+
+  console.log(arraytosort);
 
   for (let i = page * 20 - 20; i < page * 20; i++) {
     if (i === data.storage.length) break;
     array.push(
       <div className={classes.card + " " + classes.stacked} key={"com_" + i}>
         <div className={classes.card_content}>
-          <h2 className={classes.card_title}>{data.storage[i]["name"]}</h2>
-          <p className={classes.card_p}>{"id: " + data.storage[i]["id"]}</p>
-          <p className={classes.card_p}>{data.storage[i]["price"] + " Ft"}</p>
+          <h2 className={classes.card_title}>{arraytosort[i]["name"]}</h2>
+          <p className={classes.card_p}>{"id: " + arraytosort[i]["id"]}</p>
+          <p className={classes.card_p}>{arraytosort[i]["price"] + " Ft"}</p>
           <p className={classes.card_p}>
-            {data.storage[i]["stock"] + " on stock"}
+            {arraytosort[i]["stock"] + " on stock"}
           </p>
         </div>
       </div>

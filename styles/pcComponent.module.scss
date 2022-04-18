@@ -12,13 +12,14 @@
 
 .p_grid{
     display:grid;
-    grid-template-columns: repeat(auto-fit,minmax(15rem,1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit,minmax(400px,1fr));
+    gap: 1rem;
 }
 
 .card{
     border:3px solid green; 
-    aspect-ratio: 1/1.5;
+    aspect-ratio: 1.5/1;
+    width: 400px;
 }
 
 .stacked{
