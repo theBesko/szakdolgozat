@@ -21,7 +21,7 @@ function Repo() {
   const { data, error } = useSWR(API, fetcher, {
     refreshInterval: 1000,
   });
-  //console.log(data);
+
   if (error) return <h1>ERROR</h1>;
   if (!data) return <h1>LOADING</h1>;
 

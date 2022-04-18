@@ -5,11 +5,12 @@ import Header from "../../components/Header";
 import ComponentList from "../../components/ComponentList";
 import ComponentListDropdown from "../../components/ComponentListDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../styles/pcComponent.module.scss";
+import classes from "../../styles/pcComponent.module.scss";
 import { useEffect, useState } from "react";
 
 export async function getServerSideProps(context) {
   const { pcComponent } = context.query;
+  console.log(context.query);
   try {
     const repoInfo = await fetcher(API + pcComponent);
     return {
@@ -17,6 +18,7 @@ export async function getServerSideProps(context) {
         fallback: {
           [API + pcComponent]: repoInfo,
           component: pcComponent,
+          pages: Math.ceil(repoInfo.storage.length / 20),
         },
       },
     };
@@ -30,7 +32,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-function Repo() {
+function Repo(props) {
   const router = useRouter();
   const { pcComponent } = router.query;
   const { data, error } = useSWR(API + pcComponent, fetcher, {
@@ -42,19 +44,54 @@ function Repo() {
 
   const array = [];
 
-  for (const i in data.storage) {
-    array.push(<h1 key={"com_" + i}>{data.storage[i]["id"]}</h1>);
+  const page = props.page;
+
+  for (let i = page * 20 - 20; i < page * 20; i++) {
+    if (i === data.storage.length) break;
+    array.push(
+      <div className={classes.card + " " + classes.stacked} key={"com_" + i}>
+        <div className={classes.card_content}>
+          <h2 className={classes.card_title}>{data.storage[i]["name"]}</h2>
+          <p className={classes.card_p}>{"id: " + data.storage[i]["id"]}</p>
+          <p className={classes.card_p}>{data.storage[i]["price"] + " Ft"}</p>
+          <p className={classes.card_p}>
+            {data.storage[i]["stock"] + " on stock"}
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <>
-      <div>{array}</div>
+      <div className={classes.wrapper}>
+        <ComponentList lang={props.lang} component={pcComponent} />
+      </div>
+      <div className={classes.container}>
+        <div className={classes.p_grid}>{array}</div>
+      </div>
     </>
   );
 }
 
 export default function ComponentPage({ fallback }) {
-  const [lang, setLang] = useState([""]);
+  const [lang, setLang] = useState("");
+  const [page, setPage] = useState(1);
+
+  const buttons = [];
+  for (let i = 1; i < fallback.pages + 1; i++) {
+    buttons.push(
+      <button
+        className="btn btn-primary"
+        onClick={() => {
+          setPage(i);
+        }}
+        key={"btn" + i}
+      >
+        {i}
+      </button>
+    );
+  }
 
   useEffect(() => {
     setLang(localStorage.getItem("lang"));
@@ -63,9 +100,9 @@ export default function ComponentPage({ fallback }) {
   return (
     <SWRConfig value={{ fallback }}>
       <Header />
-      <ComponentList lang={lang} component={fallback.component} />
       <ComponentListDropdown lang={lang} component={fallback.component} />
-      <Repo />
+      {buttons}
+      <Repo page={page} lang={lang} />
     </SWRConfig>
   );
 }
