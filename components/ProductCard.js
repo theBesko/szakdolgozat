@@ -3,6 +3,7 @@ import Link from "next/link";
 import classes from "./ProductCard.module.scss";
 
 export default function ProductCard(props) {
+  const { name, price, sale } = props.product;
   return (
     <Link href="/builder" passHref>
       <div className={classes.card + " " + classes.stacked}>
@@ -13,8 +14,14 @@ export default function ProductCard(props) {
           height="300"
         /> */}
         <div className={classes.card_content}>
-          <h2 className={classes.card_title}>{props.product.name}</h2>
-          <p className={classes.card_p}>{props.product.price + " Ft"}</p>
+          <h2 className={classes.card_title}>{name}</h2>
+          <p className={classes.card_p}>
+            {parseFloat(sale) === 1
+              ? `${price} Ft`
+              : `${price} Ft --> ${Math.ceil(
+                  parseFloat(sale) * parseInt(price)
+                )} Ft`}
+          </p>
         </div>
       </div>
     </Link>

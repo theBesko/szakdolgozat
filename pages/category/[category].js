@@ -1,5 +1,5 @@
 import useSWR, { SWRConfig } from "swr";
-import { API, fetcher } from "../../global/global";
+import { /*API,*/ fetcher } from "../../global/global";
 import { useRouter } from "next/router";
 import Header from "../../components/Header";
 import ComponentListDropdown from "../../components/ComponentListDropdown";
@@ -11,17 +11,18 @@ import { Nav, Navbar } from "react-bootstrap";
 import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
 
+const API = "http://localhost:3000/api/a";
+
 export async function getServerSideProps(context) {
   const { category } = context.query;
-  console.log(category);
   try {
-    const repoInfo = await fetcher(API + category);
+    const repoInfo = await fetcher(API);
     return {
       props: {
         fallback: {
-          [API + category]: repoInfo,
+          [API]: repoInfo,
           category: category,
-          pages: Math.ceil(repoInfo.storage.length / 20),
+          pages: Math.ceil(repoInfo.category[category].length / 20),
         },
       },
     };
@@ -38,13 +39,19 @@ export async function getServerSideProps(context) {
 function Repo(props) {
   const router = useRouter();
   const { category } = router.query;
-  const { data, error } = useSWR(API + category, fetcher, {
+  const { data, error } = useSWR(API, fetcher, {
     refreshInterval: 1000,
   });
 
   const page = props.page;
   const renderProducts = [];
-  const sortedProducts = data.storage.sort((a, b) =>
+  const sortedProducts = [];
+
+  for (const i in data.category[category]) {
+    sortedProducts.push(data[data.category[category][i]]);
+  }
+
+  sortedProducts.sort((a, b) =>
     parseInt(a.price) > parseInt(b.price)
       ? 1
       : parseInt(b.price) > parseInt(a.price)
@@ -53,9 +60,9 @@ function Repo(props) {
   );
 
   for (let i = page * 20 - 20; i < page * 20; i++) {
-    if (i === data.storage.length) break;
+    if (i === sortedProducts.length) break;
     renderProducts.push(
-      <ProductCard key={sortedProducts[i]["id"]} product={sortedProducts[i]} />
+      <ProductCard key={"product_" + i} product={sortedProducts[i]} />
     );
   }
 
