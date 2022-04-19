@@ -2,8 +2,8 @@ export const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export const API =
   process.env.NODE_ENV === "production"
-    ? "https://buildapc-szakdolgozat.vercel.app/api/a"
-    : "http://localhost:3000/api/a";
+    ? "https://buildapc-szakdolgozat.vercel.app/api/"
+    : "http://localhost:3000/api/";
 
 export const list = [
   { category: "Highlighted", hu: "Kiemelt", en: "Highlighted" },

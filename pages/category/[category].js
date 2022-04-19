@@ -76,7 +76,7 @@ function Repo(props) {
   );
 }
 
-export default function ComponentPage({ fallback }) {
+export default function CategoryPage({ fallback }) {
   const [lang, setLang] = useState("");
   const [page, setPage] = useState(1);
 

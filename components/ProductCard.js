@@ -5,7 +5,7 @@ import classes from "./ProductCard.module.scss";
 export default function ProductCard(props) {
   const { name, price, sale } = props.product;
   return (
-    <Link href="/builder" passHref>
+    <Link href={`/product/${name}`} passHref>
       <div className={classes.card + " " + classes.stacked}>
         {/* <Image
           src="https://p1.akcdn.net/full/399523594.gigabyte-geforce-gtx-1070-g1-gaming-8gb-gddr5-256bit-gv-n1070g1-gaming-8gd.jpg"
