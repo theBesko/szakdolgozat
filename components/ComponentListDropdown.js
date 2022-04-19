@@ -9,9 +9,9 @@ export default function ComponentListDropdown(props) {
   const renderList = [];
 
   for (const i in list) {
-    if (list[i].component === props.component) {
+    if (list[i].category === props.category) {
       renderList.push(
-        <Nav.Item key={`category_${list[i].component}`}>
+        <Nav.Item key={`category_${list[i].category}`}>
           <h1>
             <b>{`► ${list[i][LANG]}`}</b>
           </h1>
@@ -20,8 +20,8 @@ export default function ComponentListDropdown(props) {
     } else {
       renderList.push(
         <Nav.Link
-          key={`category_${list[i].component}`}
-          href={`/component/${list[i].component}`}
+          key={`category_${list[i].category}`}
+          href={`/component/${list[i].category}`}
         >
           <h2>{list[i][LANG]}</h2>
         </Nav.Link>

@@ -1,8 +1,8 @@
-import classes from "./ComponentList.module.scss";
+import classes from "./CategoryMenuDesktop.module.scss";
 import Link from "next/link";
 import { list } from "../global/global";
 
-export default function ComponentList(props) {
+export default function CategoryMenuDesktop(props) {
   const LANG = props.lang ?? "hu";
 
   const renderList = [];
@@ -10,13 +10,13 @@ export default function ComponentList(props) {
   for (const i in list) {
     renderList.push(
       <Link
-        key={`category_${list[i].component}`}
-        href={`/component/${list[i].component}`}
+        key={`category_${list[i].category}`}
+        href={`/category/${list[i].category}`}
         passHref
       >
         <li
           className={
-            props.component === list[i].component
+            props.category === list[i].category
               ? classes.listitemcurrent
               : classes.listitem
           }

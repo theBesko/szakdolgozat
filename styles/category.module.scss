@@ -1,0 +1,64 @@
+$card_color: rgb(190,190,190);
+
+@media (min-width: 769px){
+    .container{
+        max-width: 100rem;
+        margin-left: 300px;
+        margin-top: 50px;
+        margin-bottom: 20px;
+        padding-inline: 2rem;
+    }
+
+    
+.card{
+    border:3px solid $card_color; 
+    aspect-ratio: 1.5/1;
+}
+}
+
+@media (max-width: 768px){
+    .container{
+        margin-inline: auto;
+    }
+
+    
+.card{
+    border:3px solid $card_color; 
+    aspect-ratio: 1.5/1;
+    margin-left: auto;
+    margin-right: auto;
+}
+}
+
+.paginationBtn{
+    margin-left: 400px;
+    margin-bottom: 80px;
+}
+
+.p_grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(400px,400px));
+    gap: 1rem;
+}
+
+
+.stacked{
+    display: grid;
+
+    *{
+        grid-column: 1/2;
+        grid-row: 1/2;
+    }
+}
+
+.card_content{
+    background-color: $card_color;
+    align-self: end;
+}
+
+.wrapper{
+    display: flex;
+    position: relative;
+    margin-top: 20px;
+}
+

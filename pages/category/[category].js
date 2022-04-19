@@ -2,21 +2,25 @@ import useSWR, { SWRConfig } from "swr";
 import { API, fetcher } from "../../global/global";
 import { useRouter } from "next/router";
 import Header from "../../components/Header";
-import ComponentList from "../../components/ComponentList";
 import ComponentListDropdown from "../../components/ComponentListDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
-import classes from "../../styles/pcComponent.module.scss";
+import classes from "../../styles/category.module.scss";
 import { useEffect, useState } from "react";
+import CategoryMenuDesktop from "../../components/CategoryMenuDesktop";
+import { Nav, Navbar } from "react-bootstrap";
+import Footer from "../../components/Footer";
+import ProductCard from "../../components/ProductCard";
 
 export async function getServerSideProps(context) {
-  const { pcComponent } = context.query;
+  const { category } = context.query;
+  console.log(category);
   try {
-    const repoInfo = await fetcher(API + pcComponent);
+    const repoInfo = await fetcher(API + category);
     return {
       props: {
         fallback: {
-          [API + pcComponent]: repoInfo,
-          component: pcComponent,
+          [API + category]: repoInfo,
+          category: category,
           pages: Math.ceil(repoInfo.storage.length / 20),
         },
       },
@@ -33,16 +37,14 @@ export async function getServerSideProps(context) {
 
 function Repo(props) {
   const router = useRouter();
-  const { pcComponent } = router.query;
-  const { data, error } = useSWR(API + pcComponent, fetcher, {
+  const { category } = router.query;
+  const { data, error } = useSWR(API + category, fetcher, {
     refreshInterval: 1000,
   });
 
   const page = props.page;
-  const array = [];
-  const arraytosort = data.storage;
-
-  arraytosort.sort((a, b) =>
+  const renderProducts = [];
+  const sortedProducts = data.storage.sort((a, b) =>
     parseInt(a.price) > parseInt(b.price)
       ? 1
       : parseInt(b.price) > parseInt(a.price)
@@ -52,27 +54,18 @@ function Repo(props) {
 
   for (let i = page * 20 - 20; i < page * 20; i++) {
     if (i === data.storage.length) break;
-    array.push(
-      <div className={classes.card + " " + classes.stacked} key={"com_" + i}>
-        <div className={classes.card_content}>
-          <h2 className={classes.card_title}>{arraytosort[i]["name"]}</h2>
-          <p className={classes.card_p}>{"id: " + arraytosort[i]["id"]}</p>
-          <p className={classes.card_p}>{arraytosort[i]["price"] + " Ft"}</p>
-          <p className={classes.card_p}>
-            {arraytosort[i]["stock"] + " on stock"}
-          </p>
-        </div>
-      </div>
+    renderProducts.push(
+      <ProductCard key={sortedProducts[i]["id"]} product={sortedProducts[i]} />
     );
   }
 
   return (
     <>
       <div className={classes.wrapper}>
-        <ComponentList lang={props.lang} component={pcComponent} />
+        <CategoryMenuDesktop lang={props.lang} category={category} />
       </div>
       <div className={classes.container}>
-        <div className={classes.p_grid}>{array}</div>
+        <div className={classes.p_grid}>{renderProducts}</div>
       </div>
     </>
   );
@@ -103,10 +96,11 @@ export default function ComponentPage({ fallback }) {
 
   return (
     <SWRConfig value={{ fallback }}>
-      <Header />
-      <ComponentListDropdown lang={lang} component={fallback.component} />
-      {buttons}
+      <Header lang={lang} />
+      <ComponentListDropdown lang={lang} category={fallback.category} />
       <Repo page={page} lang={lang} />
+      <div className={classes.paginationBtn}>{buttons}</div>
+      <Footer />
     </SWRConfig>
   );
 }
