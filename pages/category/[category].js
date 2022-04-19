@@ -1,5 +1,5 @@
 import useSWR, { SWRConfig } from "swr";
-import { /*API,*/ fetcher } from "../../global/global";
+import { API, fetcher } from "../../global/global";
 import { useRouter } from "next/router";
 import Header from "../../components/Header";
 import ComponentListDropdown from "../../components/ComponentListDropdown";
@@ -10,8 +10,6 @@ import CategoryMenuDesktop from "../../components/CategoryMenuDesktop";
 import { Nav, Navbar } from "react-bootstrap";
 import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
-
-const API = "http://localhost:3000/api/a";
 
 export async function getServerSideProps(context) {
   const { category } = context.query;
