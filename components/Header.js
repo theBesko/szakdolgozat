@@ -7,7 +7,6 @@ import {
   FormControl,
   Button,
 } from "react-bootstrap";
-import { lang } from "../global/global";
 
 export default function Header(props) {
   return (
@@ -15,6 +14,15 @@ export default function Header(props) {
       <Container fluid>
         <Nav>
           <Navbar.Brand href="/">Build-a-PC.com</Navbar.Brand>
+          <Nav.Link href="/builder">
+            {props.lang === "hu" ? "PC Építő" : "PC Builder"}
+          </Nav.Link>
+          <Nav.Link href="/account">
+            {props.lang === "hu" ? "Fiók" : "Account"}
+          </Nav.Link>
+          <Nav.Link href="/cart">
+            {props.lang === "hu" ? "Kosár" : "Cart"}
+          </Nav.Link>
           <Nav.Link href="/builder">
             {props.lang === "hu" ? "PC Építő" : "PC Builder"}
           </Nav.Link>

@@ -10,8 +10,12 @@ export default function CategoryMenuDesktop(props) {
   for (const i in list) {
     renderList.push(
       <Link
-        key={`category_${list[i].category}`}
-        href={`/category/${list[i].category}`}
+        key={
+          list[i].category === "home" ? "home" : `category_${list[i].category}`
+        }
+        href={
+          list[i].category === "home" ? "/" : `/category/${list[i].category}`
+        }
         passHref
       >
         <li

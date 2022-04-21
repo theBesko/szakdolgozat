@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import Header from "../../components/Header";
 import ComponentListDropdown from "../../components/ComponentListDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
-import classes from "../../styles/category.module.scss";
+import classes from "../../styles/product.module.scss";
 import { useEffect, useState } from "react";
-import { Nav, Navbar } from "react-bootstrap";
+import { FormGroup, Nav, Navbar } from "react-bootstrap";
 import Footer from "../../components/Footer";
 
 export async function getServerSideProps(context) {
@@ -41,9 +41,24 @@ function Repo(props) {
 
   const { name, price, sale } = data;
 
+  const renderProduct = [];
+
+  const productData = Object.keys(data);
+
+  for (const i in productData) {
+    renderProduct.push(
+      <tr key={productData[i]}>
+        <td>{`${productData[i]}:`}</td>
+        <td>{data[productData[i]]}</td>
+      </tr>
+    );
+  }
+
   return (
-    <div>
-      <div>{`${name} ${price}   ${sale}`}</div>
+    <div className={classes.productDesc + " text-color"}>
+      <table>
+        <tbody>{renderProduct}</tbody>
+      </table>
     </div>
   );
 }
@@ -57,7 +72,7 @@ export default function ProductPage({ fallback }) {
 
   return (
     <SWRConfig value={{ fallback }}>
-      {/* <Header lang={lang} /> */}
+      <Header lang={lang} />
       <Repo lang={lang} />
       <Footer />
     </SWRConfig>

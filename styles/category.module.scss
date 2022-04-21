@@ -31,7 +31,9 @@ $card_color: rgb(190,190,190);
 }
 
 .paginationBtn{
-    margin-left: 400px;
+    width: 100%;
+    display:flex;
+    justify-content: center;
     margin-bottom: 80px;
 }
 

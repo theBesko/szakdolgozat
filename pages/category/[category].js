@@ -7,9 +7,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import classes from "../../styles/category.module.scss";
 import { useEffect, useState } from "react";
 import CategoryMenuDesktop from "../../components/CategoryMenuDesktop";
-import { Nav, Navbar } from "react-bootstrap";
+import { Nav, Navbar, Button, ButtonGroup } from "react-bootstrap";
 import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
+import Pagination from "../../components/Pagination";
 
 export async function getServerSideProps(context) {
   const { category } = context.query;
@@ -63,7 +64,6 @@ function Repo(props) {
       <ProductCard key={"product_" + i} product={sortedProducts[i]} />
     );
   }
-
   return (
     <>
       <div className={classes.wrapper}>
@@ -77,35 +77,28 @@ function Repo(props) {
 }
 
 export default function CategoryPage({ fallback }) {
-  const [lang, setLang] = useState("");
+  const [lang, setLang] = useState("hu");
+  const [theme, setTheme] = useState("light");
   const [page, setPage] = useState(1);
 
-  const buttons = [];
-  for (let i = 1; i < fallback.pages + 1; i++) {
-    buttons.push(
-      <button
-        className="btn btn-primary"
-        onClick={() => {
-          setPage(i);
-        }}
-        key={"btn" + i}
-      >
-        {i}
-      </button>
-    );
-  }
-
   useEffect(() => {
-    setLang(localStorage.getItem("lang"));
+    setLang(localStorage.getItem("lang") ?? "hu");
+    // setTheme(localStorage.getItem("theme") ?? "light");
   }, []);
+
+  const handleChange = (page) => {
+    setPage(page);
+  };
 
   return (
     <SWRConfig value={{ fallback }}>
       <Header lang={lang} />
       <ComponentListDropdown lang={lang} category={fallback.category} />
       <Repo page={page} lang={lang} />
-      <div className={classes.paginationBtn}>{buttons}</div>
-      <Footer />
+      <div className={classes.paginationBtn}>
+        <Pagination change={handleChange} page={page} length={fallback.pages} />
+      </div>
+      <Footer lang={lang} />
     </SWRConfig>
   );
 }

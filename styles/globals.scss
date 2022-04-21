@@ -6,6 +6,14 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+.text-color-dark{
+  color: red;
+}
+
+.text-color-light{
+  color: cyan;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -20,3 +28,4 @@ a {
       color: black
   }
 }
+

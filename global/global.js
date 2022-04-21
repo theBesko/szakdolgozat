@@ -6,7 +6,7 @@ export const API =
     : "http://localhost:3000/api/";
 
 export const list = [
-  { category: "Highlighted", hu: "Kiemelt", en: "Highlighted" },
+  { category: "home", hu: "Kiemelt", en: "Highlighted" },
   { category: "CPU_Cooler", hu: "Processzor hűtő", en: "CPU Cooler" },
   { category: "Case", hu: "Gépház", en: "Case" },
   { category: "GPU", hu: "Videókártya", en: "Graphics Card" },
@@ -17,12 +17,31 @@ export const list = [
   { category: "CPU", hu: "Processzor", en: "Processor" },
   { category: "SSD", hu: "SSD", en: "SSD" },
   { category: "Monitor", hu: "Monitor", en: "Monitor" },
-  { category: "Peripherials", hu: "Perifériák", en: "Peripherials" },
+  { category: "Peripherial", hu: "Perifériák", en: "Peripherials" },
   { category: "Pre-Built", hu: "Előre épített", en: "Pre-Built" },
 ];
 
-export const lang = (lang) => (event) => {
-  localStorage.setItem("lang", lang);
+export const lang = () => {
+  localStorage.setItem(
+    "lang",
+    !localStorage.getItem("lang")
+      ? "en"
+      : localStorage.getItem("lang") === "en"
+      ? "hu"
+      : "en"
+  );
+  location.reload();
+};
+
+export const theme = () => {
+  localStorage.setItem(
+    "theme",
+    !localStorage.getItem("theme")
+      ? "dark"
+      : localStorage.getItem("theme") === "dark"
+      ? "light"
+      : "dark"
+  );
   location.reload();
 };
 
