@@ -11,6 +11,7 @@ import { Nav, Navbar, Button, ButtonGroup } from "react-bootstrap";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
+
 export async function getServerSideProps(context) {
   try {
     const repoInfo = await fetcher(API);
@@ -45,6 +46,7 @@ function Repo(props) {
 
   for (const i in data) {
     if (i === "category") continue;
+    // if (parseInt(data[i].sale) < 1)
     sortedProducts.push(data[i]);
   }
 
@@ -77,9 +79,9 @@ function Repo(props) {
 export default function HomePage({ fallback }) {
   const [lang, setLang] = useState("hu");
   const [theme, setTheme] = useState("light");
-  const [page, setPage] = useState(fallback.page);
-  const router = useRouter();
+  const [page, setPage] = useState(parseInt(fallback.page));
 
+  const router = useRouter();
   useEffect(() => {
     setLang(localStorage.getItem("lang") ?? "hu");
     // setTheme(localStorage.getItem("theme") ?? "light");

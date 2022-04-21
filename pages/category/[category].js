@@ -81,7 +81,7 @@ function Repo(props) {
 export default function CategoryPage({ fallback }) {
   const [lang, setLang] = useState("hu");
   const [theme, setTheme] = useState("light");
-  const [page, setPage] = useState(fallback.page);
+  const [page, setPage] = useState(parseInt(fallback.page));
   const router = useRouter();
 
   useEffect(() => {
