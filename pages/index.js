@@ -11,24 +11,25 @@ import { Nav, Navbar, Button, ButtonGroup } from "react-bootstrap";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   try {
     const repoInfo = await fetcher(API);
     return {
       props: {
         fallback: {
           [API]: repoInfo,
+          page: context.query.page ?? 1,
           pages: Math.ceil(Object.keys(repoInfo).length / 20),
         },
       },
     };
   } catch (error) {
-    // return {
-    //   redirect: {
-    //     destination: "/",
-    //     permanent: false,
-    //   },
-    // };
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
   }
 }
 
@@ -38,7 +39,7 @@ function Repo(props) {
     refreshInterval: 1000,
   });
 
-  const page = props.page;
+  const page = router.query.page ?? 1;
   const renderProducts = [];
   const sortedProducts = [];
 
@@ -76,7 +77,8 @@ function Repo(props) {
 export default function HomePage({ fallback }) {
   const [lang, setLang] = useState("hu");
   const [theme, setTheme] = useState("light");
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(fallback.page);
+  const router = useRouter();
 
   useEffect(() => {
     setLang(localStorage.getItem("lang") ?? "hu");
@@ -85,6 +87,7 @@ export default function HomePage({ fallback }) {
 
   const handleChange = (page) => {
     setPage(page);
+    router.push(`/?page=${page}`);
   };
 
   return (

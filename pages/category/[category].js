@@ -13,7 +13,8 @@ import ProductCard from "../../components/ProductCard";
 import Pagination from "../../components/Pagination";
 
 export async function getServerSideProps(context) {
-  const { category } = context.query;
+  const { category, page } = context.query;
+
   try {
     const repoInfo = await fetcher(API);
     return {
@@ -21,6 +22,7 @@ export async function getServerSideProps(context) {
         fallback: {
           [API]: repoInfo,
           category: category,
+          page: page ?? 1,
           pages: Math.ceil(repoInfo.category[category].length / 20),
         },
       },
@@ -79,7 +81,8 @@ function Repo(props) {
 export default function CategoryPage({ fallback }) {
   const [lang, setLang] = useState("hu");
   const [theme, setTheme] = useState("light");
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(fallback.page);
+  const router = useRouter();
 
   useEffect(() => {
     setLang(localStorage.getItem("lang") ?? "hu");
@@ -88,6 +91,7 @@ export default function CategoryPage({ fallback }) {
 
   const handleChange = (page) => {
     setPage(page);
+    router.push(`${fallback.category}/?page=${page}`);
   };
 
   return (
