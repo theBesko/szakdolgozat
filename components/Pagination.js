@@ -96,7 +96,6 @@ export default function Pagination({ page, length, change }) {
     }
 
     if (page > 2 && page < length - 1) {
-      console.log(length - 2);
       btnArray.push(
         <Button variant="outline-dark" onClick={(e) => change(1)} key={`btn_1`}>
           {"<<"}

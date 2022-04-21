@@ -13,7 +13,7 @@ import ProductCard from "../../components/ProductCard";
 import Pagination from "../../components/Pagination";
 
 export async function getServerSideProps(context) {
-  const { category, page } = context.query;
+  const { category } = context.query;
 
   try {
     const repoInfo = await fetcher(API);
@@ -22,7 +22,6 @@ export async function getServerSideProps(context) {
         fallback: {
           [API]: repoInfo,
           category: category,
-          page: page ?? 1,
           pages: Math.ceil(repoInfo.category[category].length / 20),
         },
       },
@@ -40,16 +39,16 @@ export async function getServerSideProps(context) {
 function Repo(props) {
   const router = useRouter();
   const { category } = router.query;
-  const { data, error } = useSWR(API, fetcher, {
+  const { data } = useSWR(API, fetcher, {
     refreshInterval: 1000,
   });
 
-  const page = props.page;
+  const page = parseInt(router.query.page ?? 1);
   const renderProducts = [];
   const sortedProducts = [];
 
   for (const i in data.category[category]) {
-    sortedProducts.push(data[data.category[category][i]]);
+    sortedProducts.push(data.productStorage[data.category[category][i]]);
   }
 
   sortedProducts.sort((a, b) =>
@@ -81,8 +80,9 @@ function Repo(props) {
 export default function CategoryPage({ fallback }) {
   const [lang, setLang] = useState("hu");
   const [theme, setTheme] = useState("light");
-  const [page, setPage] = useState(parseInt(fallback.page));
+
   const router = useRouter();
+  const page = parseInt(router.query.page ?? 1);
 
   useEffect(() => {
     setLang(localStorage.getItem("lang") ?? "hu");
@@ -90,7 +90,6 @@ export default function CategoryPage({ fallback }) {
   }, []);
 
   const handleChange = (page) => {
-    setPage(page);
     router.push(`${fallback.category}/?page=${page}`);
   };
 
