@@ -1,5 +1,10 @@
 import useSWR, { SWRConfig } from "swr";
-import { API, fetcher } from "../../global/global";
+import {
+  API,
+  fetcher,
+  loadAndSortProducts,
+  renderProductsJSX,
+} from "../../global/global";
 import { useRouter } from "next/router";
 import Header from "../../components/Header";
 import ComponentListDropdown from "../../components/ComponentListDropdown";
@@ -39,32 +44,21 @@ export async function getServerSideProps(context) {
 function Repo(props) {
   const router = useRouter();
   const { category } = router.query;
-  const { data } = useSWR(API, fetcher, {
+  const {
+    data: { productStorage, category: categoryArray },
+  } = useSWR(API, fetcher, {
     refreshInterval: 1000,
   });
 
   const page = parseInt(router.query.page ?? 1);
-  const renderProducts = [];
-  const sortedProducts = [];
-
-  for (const i in data.category[category]) {
-    sortedProducts.push(data.productStorage[data.category[category][i]]);
-  }
-
-  sortedProducts.sort((a, b) =>
-    parseInt(a.price) > parseInt(b.price)
-      ? 1
-      : parseInt(b.price) > parseInt(a.price)
-      ? -1
-      : 0
+  const sortedProducts = loadAndSortProducts(
+    "price",
+    "ASC",
+    productStorage,
+    categoryArray[category]
   );
+  const renderProducts = renderProductsJSX(page, 20, sortedProducts);
 
-  for (let i = page * 20 - 20; i < page * 20; i++) {
-    if (i === sortedProducts.length) break;
-    renderProducts.push(
-      <ProductCard key={"product_" + i} product={sortedProducts[i]} />
-    );
-  }
   return (
     <>
       <div className={classes.wrapper}>
