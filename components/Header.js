@@ -10,7 +10,7 @@ import {
 
 export default function Header(props) {
   return (
-    <Navbar collapseOnSelect fixed="top" expand="lg" bg="dark" variant="dark">
+    <Navbar collapseOnSelect sticky="top" expand="lg" bg="dark" variant="dark">
       <Container fluid>
         <Nav>
           <Navbar.Brand href="/">Build-a-PC.com</Navbar.Brand>
@@ -22,9 +22,6 @@ export default function Header(props) {
           </Nav.Link>
           <Nav.Link href="/cart">
             {props.lang === "hu" ? "Kosár" : "Cart"}
-          </Nav.Link>
-          <Nav.Link href="/builder">
-            {props.lang === "hu" ? "PC Építő" : "PC Builder"}
           </Nav.Link>
         </Nav>
         <Nav className="me-5">

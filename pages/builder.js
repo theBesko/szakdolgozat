@@ -2,15 +2,9 @@ import useSWR, { SWRConfig } from "swr";
 import { API, fetcher } from "../global/global";
 import { useRouter } from "next/router";
 import Header from "../components/Header";
-import ComponentListDropdown from "../components/ComponentListDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
-import classes from "../styles/category.module.scss";
-import { useEffect, useState } from "react";
-import CategoryMenuDesktop from "../components/CategoryMenuDesktop";
-import { Nav, Navbar, Button, ButtonGroup } from "react-bootstrap";
+import { useEffect, useMemo, useState } from "react";
 import Footer from "../components/Footer";
-import ProductCard from "../components/ProductCard";
-import Pagination from "../components/Pagination";
 
 export async function getServerSideProps() {
   try {
@@ -19,7 +13,6 @@ export async function getServerSideProps() {
       props: {
         fallback: {
           [API]: repoInfo,
-          pages: Math.ceil(Object.keys(repoInfo.productStorage).length / 20),
         },
       },
     };
@@ -33,31 +26,118 @@ export async function getServerSideProps() {
   }
 }
 
+// function listComponent(categoryArray, storage, component) {
+//   const array = [];
+
+//   for (const product in categoryArray) {
+//     array.push(
+//       <h2 key={storage[categoryArray[product]].name} onClick={() => {}}>
+//         {storage[categoryArray[product]].name}
+//       </h2>
+//     );
+//   }
+
+//   return array;
+// }
+
+const dummy = {
+  CPU: "empty",
+  RAM: "empty",
+  SSD: "empty",
+  HDD: "empty",
+  Motherboard: "empty",
+  PSU: "empty",
+  CPU_Cooler: "empty",
+  Case: "empty",
+  GPU: "empty",
+};
+
 function Repo() {
+  const [component, setComponent] = useState("");
   const router = useRouter();
-  const { data } = useSWR(API, fetcher, {
+  const componentQuery = router.query;
+  const {
+    data: { category, productStorage },
+  } = useSWR(API, fetcher, {
     refreshInterval: 1000,
   });
 
-  const cats = router.query;
+  const [components, setComponents] = useState({
+    ...dummy,
+    ...componentQuery,
+  });
 
-  for (const i in cats) {
-    console.log(i + " " + cats[i]);
+  // useEffect(() => {
+  //   setComponents((components) => ({ ...components, ...componentQuery }));
+  // }, []);
+
+  const compTable = [];
+
+  for (const c in components) {
+    compTable.push(
+      <tr
+        key={"com_" + c}
+        onClick={() => {
+          setComponent(c);
+        }}
+      >
+        <td>{c}</td>
+        <td>{components[c] === "empty" ? "" : components[c]}</td>
+      </tr>
+    );
   }
 
+  const renderList = [];
+  // component !== ""
+  //   ? listComponent(category[component], productStorage, component)
+  //   : [];
+
+  for (const product in category[component]) {
+    let temp = { [component]: category[component][product] };
+    renderList.push(
+      <h2
+        key={productStorage[category[component][product]].name}
+        onClick={() => {
+          setComponents((components) => ({ ...components, ...temp }));
+          setComponent("");
+        }}
+      >
+        {productStorage[category[component][product]].name}
+      </h2>
+    );
+  }
+
+  useEffect(() => {
+    let final = router.pathname + "?";
+
+    for (const c in components) {
+      final += components[c] === "empty" ? "" : `${c}=${components[c]}&`;
+    }
+
+    router.push(final.slice(0, -1));
+  }, [components]);
+
   return (
-    <>
-      <div> a</div>
-    </>
+    <div>
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>Component</th>
+              <th>Chosen</th>
+            </tr>
+            {compTable}
+          </tbody>
+        </table>
+      </div>
+      <div>{renderList}</div>
+    </div>
   );
 }
 
 export default function HomePage({ fallback }) {
   const [lang, setLang] = useState("hu");
   const [theme, setTheme] = useState("light");
-
-  const router = useRouter();
-  const page = parseInt(router.query.page ?? 1);
 
   useEffect(() => {
     setLang(localStorage.getItem("lang") ?? "hu");
@@ -67,7 +147,7 @@ export default function HomePage({ fallback }) {
   return (
     <SWRConfig value={{ fallback }}>
       <Header lang={lang} />
-      <Repo page={page} lang={lang} />
+      <Repo lang={lang} />
       <Footer lang={lang} />
     </SWRConfig>
   );
