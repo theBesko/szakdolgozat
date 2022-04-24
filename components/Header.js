@@ -15,7 +15,7 @@ export default function Header(props) {
 
   const search = (val) => {
     if (val) router.push(`/search?value=${val}`, undefined, { shallow: true });
-    else router.push("/");
+    else router.push("/search");
   };
 
   return (

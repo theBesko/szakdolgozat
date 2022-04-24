@@ -27,22 +27,34 @@ export async function getServerSideProps() {
       },
     };
   } catch (error) {
-    // return {
-    //   redirect: {
-    //     destination: "/",
-    //     permanent: false,
-    //   },
-    // };
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
   }
 }
 
 function Repo({ lang }) {
   const router = useRouter();
+  const {
+    data: { productStorage },
+  } = useSWR(API, fetcher, {
+    refreshInterval: 1000,
+  });
+
+  const s = [];
+
+  for (const product in productStorage) {
+    if (product.includes(router.query.value))
+      s.push(<h1 key={`p_${product}`}>{product}</h1>);
+  }
 
   return (
     <>
       <div>
-        <h1>{router.query.value}</h1>
+        <h1>{s}</h1>
       </div>
     </>
   );
