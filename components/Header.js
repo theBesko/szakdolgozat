@@ -8,7 +8,16 @@ import {
   Button,
 } from "react-bootstrap";
 
+import { useRouter } from "next/dist/client/router";
+
 export default function Header(props) {
+  const router = useRouter();
+
+  const search = (val) => {
+    if (val) router.push(`/search?value=${val}`, undefined, { shallow: true });
+    else router.push("/");
+  };
+
   return (
     <Navbar collapseOnSelect sticky="top" expand="lg" bg="dark" variant="dark">
       <Container fluid>
@@ -27,14 +36,15 @@ export default function Header(props) {
         <Nav className="me-5">
           <Form className="d-flex">
             <FormControl
+              autoFocus
               type="search"
               placeholder={props.lang === "hu" ? "Keresés..." : "Search..."}
-              className="me-2"
               aria-label="Search"
+              defaultValue={router.query.value}
+              onChange={(e) => {
+                search(e.target.value);
+              }}
             />
-            <Button variant="outline-success">
-              {props.lang === "hu" ? "Keresés" : "Search"}
-            </Button>
           </Form>
         </Nav>
       </Container>

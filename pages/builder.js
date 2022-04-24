@@ -26,20 +26,6 @@ export async function getServerSideProps() {
   }
 }
 
-// function listComponent(categoryArray, storage, component) {
-//   const array = [];
-
-//   for (const product in categoryArray) {
-//     array.push(
-//       <h2 key={storage[categoryArray[product]].name} onClick={() => {}}>
-//         {storage[categoryArray[product]].name}
-//       </h2>
-//     );
-//   }
-
-//   return array;
-// }
-
 const dummy = {
   CPU: "empty",
   RAM: "empty",
@@ -51,6 +37,10 @@ const dummy = {
   Case: "empty",
   GPU: "empty",
 };
+
+function discountedPrice(p) {
+  return Math.ceil(parseInt(p.price) * parseFloat(p.sale));
+}
 
 function Repo() {
   const [component, setComponent] = useState("");
@@ -67,33 +57,45 @@ function Repo() {
     ...componentQuery,
   });
 
-  // useEffect(() => {
-  //   setComponents((components) => ({ ...components, ...componentQuery }));
-  // }, []);
-
   const compTable = [];
 
   for (const c in components) {
+    let temp = { [c]: "empty" };
+
     compTable.push(
       <tr
         key={"com_" + c}
         onClick={() => {
-          setComponent(c);
+          if (components[c] === "empty") {
+            setComponent(c);
+          } else {
+            setComponents((components) => ({ ...components, ...temp }));
+          }
         }}
       >
-        <td>{c}</td>
-        <td>{components[c] === "empty" ? "" : components[c]}</td>
+        <td>
+          <h2>{`${c}: `}</h2>
+        </td>
+        <td>
+          <h2>
+            {components[c] === "empty"
+              ? ""
+              : `${components[c]} --- ${discountedPrice(
+                  productStorage[components[c]]
+                )} Ft`}
+          </h2>
+        </td>
       </tr>
     );
   }
 
   const renderList = [];
-  // component !== ""
-  //   ? listComponent(category[component], productStorage, component)
-  //   : [];
 
   for (const product in category[component]) {
-    let temp = { [component]: category[component][product] };
+    let temp = {
+      [component]: category[component][product],
+    };
+
     renderList.push(
       <h2
         key={productStorage[category[component][product]].name}
@@ -102,25 +104,34 @@ function Repo() {
           setComponent("");
         }}
       >
-        {productStorage[category[component][product]].name}
+        {productStorage[category[component][product]].name +
+          " " +
+          productStorage[category[component][product]].price}
       </h2>
     );
   }
 
+  const [finalPrice, setFinalPrice] = useState(0);
+
   useEffect(() => {
-    let final = router.pathname + "?";
+    let price = 0;
+    let q = {};
 
     for (const c in components) {
-      final += components[c] === "empty" ? "" : `${c}=${components[c]}&`;
+      if (components[c] !== "empty") {
+        q = { ...q, [c]: components[c] };
+        price += discountedPrice(productStorage[components[c]]);
+      }
     }
 
-    router.push(final.slice(0, -1));
+    setFinalPrice(price);
+    router.push({ pathname: router.pathname, query: q });
   }, [components]);
 
   return (
     <div>
       <div>
-        <table>
+        <table style={{ textAlign: "right" }}>
           <tbody>
             <tr>
               <th>Component</th>
@@ -130,12 +141,15 @@ function Repo() {
           </tbody>
         </table>
       </div>
+      <div>
+        <h1>{finalPrice}</h1>
+      </div>
       <div>{renderList}</div>
     </div>
   );
 }
 
-export default function HomePage({ fallback }) {
+export default function BuilderPage({ fallback }) {
   const [lang, setLang] = useState("hu");
   const [theme, setTheme] = useState("light");
 
