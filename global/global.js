@@ -18,9 +18,9 @@ export const list = [
   { category: "PSU", hu: "Tápegység", en: "Powersupply Unit" },
   { category: "CPU", hu: "Processzor", en: "Processor" },
   { category: "SSD", hu: "SSD", en: "SSD" },
-  { category: "Monitor", hu: "Monitor", en: "Monitor" },
-  { category: "Peripherial", hu: "Perifériák", en: "Peripherials" },
-  { category: "Pre-Built", hu: "Előre épített", en: "Pre-Built" },
+  // { category: "Monitor", hu: "Monitor", en: "Monitor" },
+  // { category: "Peripherial", hu: "Perifériák", en: "Peripherials" },
+  // { category: "Pre-Built", hu: "Előre épített", en: "Pre-Built" },
 ];
 
 export const lang = () => {

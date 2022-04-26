@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import CategoryMenuDesktop from "../components/CategoryMenuDesktop";
 import Footer from "../components/Footer";
 import Pagination from "../components/Pagination";
+import { Col, Container, Row } from "react-bootstrap";
 
 export async function getServerSideProps() {
   try {
@@ -23,9 +24,7 @@ export async function getServerSideProps() {
       props: {
         fallback: {
           [API]: repoInfo,
-          pages: Math.ceil(
-            numberOfProductsOnSale(repoInfo.productStorage) / 20
-          ),
+          pages: Math.ceil(numberOfProductsOnSale(repoInfo.productStorage) / 2),
         },
       },
     };
@@ -49,17 +48,21 @@ function Repo({ lang }) {
   const router = useRouter();
   const page = parseInt(router.query.page ?? 1);
   const sortedProducts = loadAndSortProducts("price", "ASC", productStorage);
-  const renderProducts = renderProductsJSX(page, 20, sortedProducts);
+  const renderProducts = renderProductsJSX(page, 2, sortedProducts);
 
   return (
-    <>
-      <div className={classes.wrapper}>
-        <CategoryMenuDesktop lang={lang} category={"home"} />
-      </div>
-      <div className={classes.container}>
-        <div className={classes.p_grid}>{renderProducts}</div>
-      </div>
-    </>
+    <Container fluid>
+      <Row>
+        <Col lg={3} className={"d-lg-flex d-none "}>
+          <CategoryMenuDesktop lang={lang} category={"home"} />
+        </Col>
+        <Col md={12} lg={9}>
+          <Row xs={1} md={2} lg={3} className="g-2">
+            {renderProducts}
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

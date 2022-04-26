@@ -19,7 +19,14 @@ export default function Header(props) {
   };
 
   return (
-    <Navbar collapseOnSelect sticky="top" expand="lg" bg="dark" variant="dark">
+    <Navbar
+      className={"d-none d-lg-flex"}
+      collapseOnSelect
+      sticky="top"
+      expand="lg"
+      bg="dark"
+      variant="dark"
+    >
       <Container fluid>
         <Nav>
           <Navbar.Brand href="/">Build-a-PC.com</Navbar.Brand>

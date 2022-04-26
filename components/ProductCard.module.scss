@@ -1,36 +1,5 @@
-$card_color: rgb(190,190,190);
-
-@media (min-width: 769px){
-    .card{
-        border:3px solid $card_color; 
-        aspect-ratio: 1.5/1;
-        cursor: pointer;
-    }
-}
-
-@media (max-width: 768px){
-
-.card{
-    border:3px solid $card_color; 
-    aspect-ratio: 1.5/1;
-    margin-left: auto;
-    margin-right: auto;
-    cursor: pointer;
-}
-}
-
-
-.stacked{
-    display: grid;
-
-    *{
-        grid-column: 1/2;
-        grid-row: 1/2;
-    }
-}
-
-.card_content{
-    background-color: $card_color;
-    align-self: end;
-    opacity: 80%;
+.item:hover{
+    cursor:pointer;
+    background-color: rgb(49, 49, 49);
+    color: whitesmoke
 }

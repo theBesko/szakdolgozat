@@ -3,7 +3,13 @@ import { lang, theme } from "../global/global";
 
 export default function Footer(props) {
   return (
-    <Navbar fixed="bottom" expand="lg" bg="dark" variant="dark">
+    <Navbar
+      className={"d-none d-lg-flex"}
+      fixed="bottom"
+      expand="lg"
+      bg="dark"
+      variant="dark"
+    >
       <Nav className="me-auto">
         <Navbar.Brand href="/">Build-a-PC.com</Navbar.Brand>
       </Nav>

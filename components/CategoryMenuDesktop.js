@@ -1,6 +1,7 @@
 import classes from "./CategoryMenuDesktop.module.scss";
 import Link from "next/link";
 import { list } from "../global/global";
+import { Card, ListGroup } from "react-bootstrap";
 
 export default function CategoryMenuDesktop(props) {
   const LANG = props.lang ?? "hu";
@@ -18,22 +19,19 @@ export default function CategoryMenuDesktop(props) {
         }
         passHref
       >
-        <li
-          className={
-            props.category === list[i].category
-              ? classes.listitemcurrent
-              : classes.listitem
-          }
+        <ListGroup.Item
+          className={classes.item}
+          active={props.category === list[i].category}
         >
-          {list[i][LANG]}
-        </li>
+          <h3>{list[i][LANG]}</h3>
+        </ListGroup.Item>
       </Link>
     );
   }
 
   return (
-    <div className={classes.listDiv}>
-      <ul className={classes.list}>{renderList}</ul>
-    </div>
+    <Card style={{ width: "18rem" }}>
+      <ListGroup variant="flush">{renderList}</ListGroup>
+    </Card>
   );
 }

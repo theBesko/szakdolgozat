@@ -12,7 +12,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import classes from "../../styles/category.module.scss";
 import { useEffect, useState } from "react";
 import CategoryMenuDesktop from "../../components/CategoryMenuDesktop";
-import { Nav, Navbar, Button, ButtonGroup } from "react-bootstrap";
+import {
+  Nav,
+  Navbar,
+  Button,
+  ButtonGroup,
+  Col,
+  Card,
+  Row,
+  Container,
+  ListGroup,
+} from "react-bootstrap";
 import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
 import Pagination from "../../components/Pagination";
@@ -41,7 +51,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-function Repo(props) {
+function Repo({ lang }) {
   const router = useRouter();
   const { category } = router.query;
   const {
@@ -61,12 +71,18 @@ function Repo(props) {
 
   return (
     <>
-      <div className={classes.wrapper}>
-        <CategoryMenuDesktop lang={props.lang} category={category} />
-      </div>
-      <div className={classes.container}>
-        <div className={classes.p_grid}>{renderProducts}</div>
-      </div>
+      <Container fluid>
+        <Row>
+          <Col lg={3} className={"d-lg-flex d-none "}>
+            <CategoryMenuDesktop lang={lang} category={category} />
+          </Col>
+          <Col md={12} lg={9}>
+            <Row xs={1} md={2} lg={3} className="g-2">
+              {renderProducts}
+            </Row>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 }

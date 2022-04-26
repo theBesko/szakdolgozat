@@ -12,9 +12,9 @@ export default function ComponentListDropdown(props) {
     if (list[i].category === props.category) {
       renderList.push(
         <Nav.Item key={`category_${list[i].category}`}>
-          <h1>
+          <h2>
             <b>{`► ${list[i][LANG]}`}</b>
-          </h1>
+          </h2>
         </Nav.Item>
       );
     } else {
@@ -23,7 +23,7 @@ export default function ComponentListDropdown(props) {
           key={`category_${list[i].category}`}
           href={`/component/${list[i].category}`}
         >
-          <h2>{list[i][LANG]}</h2>
+          <h3>{list[i][LANG]}</h3>
         </Nav.Link>
       );
     }
@@ -37,7 +37,7 @@ export default function ComponentListDropdown(props) {
         bg="dark"
         variant="dark"
         expand={false}
-        className={classes.nav}
+        className={"d-xs-flex d-lg-none"}
       >
         <Container fluid>
           <Navbar.Brand>Menu</Navbar.Brand>
@@ -46,7 +46,7 @@ export default function ComponentListDropdown(props) {
             variant="dark"
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
-            placement="top"
+            placement="end"
             // className="bg-dark"
           >
             <Offcanvas.Header closeButton>

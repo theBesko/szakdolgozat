@@ -5,7 +5,8 @@ import Header from "../components/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useMemo, useState } from "react";
 import Footer from "../components/Footer";
-import { Button } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import BuilderComponentItem from "../components/BuilderComponentItem";
 
 export async function getServerSideProps() {
   try {
@@ -50,14 +51,19 @@ function setProductToComponent(c, p, fnList, fnComp) {
 
 function ListE({ com, p_id, fn1, fn2, p }) {
   return (
-    <h2
+    <Col
       onClick={() => {
         setProductToComponent(com, p_id, fn1, fn2);
       }}
       key={p.name}
     >
-      {`${p.name} - ${p.price} Ft`}
-    </h2>
+      <Card border="dark">
+        <Card.Body>
+          <Card.Title>{p.name}</Card.Title>
+          <Card.Text>{p.price}</Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
   );
 }
 
@@ -85,6 +91,30 @@ function selectFirstComponent(
   fnList(renderList);
 }
 
+function selectPSU(obj, { category, productStorage }, fnList, fnComp) {
+  const renderList = [];
+  const component = "PSU";
+
+  for (const product in category[component]) {
+    if (
+      parseInt(productStorage[[obj.GPU]].watt) <=
+      parseInt(productStorage[category[component][product]].watt)
+    )
+      renderList.push(
+        <ListE
+          com={component}
+          p_id={category[component][product]}
+          fn1={fnList}
+          fn2={fnComp}
+          key={`${component}_${product}`}
+          p={productStorage[category[component][product]]}
+        />
+      );
+  }
+
+  fnList(renderList);
+}
+
 function selectCPUAfterMotherboard(
   obj,
   { category, productStorage },
@@ -96,8 +126,8 @@ function selectCPUAfterMotherboard(
 
   for (const product in category[component]) {
     if (
-      productStorage[[obj.Motherboard]].brand ===
-      productStorage[category[component][product]].brand
+      productStorage[[obj.Motherboard]].socket ===
+      productStorage[category[component][product]].socket
     )
       renderList.push(
         <ListE
@@ -125,8 +155,8 @@ function selectMotherboardAfterCPU(
 
   for (const product in category[component]) {
     if (
-      productStorage[[obj.CPU]].brand ===
-      productStorage[category[component][product]].brand
+      productStorage[[obj.CPU]].socket ===
+      productStorage[category[component][product]].socket
     )
       renderList.push(
         <ListE
@@ -243,7 +273,6 @@ function Repo() {
   //   // }
   // }, [components]);
 
-  const btn = [];
   const [list, setList] = useState([]);
 
   const listComps = (l) => {
@@ -252,11 +281,12 @@ function Repo() {
 
   const setCom = (c, p) => {
     setComps({ ...comps, [c]: p });
+    console.log(comps);
   };
 
-  btn.push(
-    <Button
-      key="cpu"
+  const compList = [
+    <Col
+      key="CPU"
       onClick={() => {
         if (Object.keys(comps).includes("Motherboard")) {
           selectCPUAfterMotherboard(comps, data, listComps, setCom);
@@ -265,12 +295,13 @@ function Repo() {
         }
       }}
     >
-      CPU
-    </Button>
-  );
-  btn.push(
-    <Button
-      key="mb"
+      <BuilderComponentItem
+        component="CPU"
+        chosen={data.productStorage[comps.CPU]?.name ?? ""}
+      />
+    </Col>,
+    <Col
+      key="Motherboard"
       onClick={() => {
         if (Object.keys(comps).includes("CPU")) {
           selectMotherboardAfterCPU(comps, data, listComps, setCom);
@@ -279,42 +310,82 @@ function Repo() {
         }
       }}
     >
-      Motherboard
-    </Button>
-  );
-
-  const [rc, setRc] = useState([]);
-
-  useEffect(() => {
-    const a = [];
-    for (const c in comps) {
-      a.push(<h2 key={`c_${c}`}>{`${c}: ${comps[c]}`}</h2>);
-    }
-    console.log(a);
-    setRc(a);
-  }, [comps]);
+      <BuilderComponentItem
+        component="Motherboard"
+        chosen={data.productStorage[comps.Motherboard]?.name ?? ""}
+      />
+    </Col>,
+    <Col
+      key="GPU"
+      onClick={() => {
+        selectFirstComponent("GPU", data, listComps, setCom);
+      }}
+    >
+      <BuilderComponentItem
+        component="GPU"
+        chosen={data.productStorage[comps.GPU]?.name ?? ""}
+      />
+    </Col>,
+    <Col key="RAM">
+      <BuilderComponentItem
+        component="RAM"
+        chosen={data.productStorage[comps.RAM]?.name ?? ""}
+      />
+    </Col>,
+    <Col key="Cooler">
+      <BuilderComponentItem
+        component="Cooler"
+        chosen={data.productStorage[comps.CPU_Cooler]?.name ?? ""}
+      />
+    </Col>,
+    <Col key="SSD">
+      <BuilderComponentItem
+        component="SSD"
+        chosen={data.productStorage[comps.SSD]?.name ?? ""}
+      />
+    </Col>,
+    <Col key="HDD">
+      <BuilderComponentItem
+        component="HDD"
+        chosen={data.productStorage[comps.HDD]?.name ?? ""}
+      />
+    </Col>,
+    <Col
+      key="PSU"
+      onClick={() => {
+        if (Object.keys(comps).includes("GPU")) {
+          selectPSU(comps, data, listComps, setCom);
+        }
+      }}
+    >
+      <BuilderComponentItem
+        component="PSU"
+        chosen={data.productStorage[comps.PSU]?.name ?? ""}
+      />
+    </Col>,
+    <Col key="Case">
+      <BuilderComponentItem
+        component="Case"
+        chosen={data.productStorage[comps.Case]?.name ?? ""}
+      />
+    </Col>,
+  ];
 
   return (
-    <div>
-      <div>{rc}</div>
-      <div>{btn}</div>
-      <div>{list}</div>
-      {/* <div>
-        <table style={{ textAlign: "right" }}>
-          <tbody>
-            <tr>
-              <th>Component</th>
-              <th>Chosen</th>
-            </tr>
-            {compTable}
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <h1>{finalPrice}</h1>
-      </div>
-      <div>{renderList}</div> */}
-    </div>
+    <Container fluid>
+      <Row>
+        <Col xs={5}>
+          <Row lg={1} className="g-2">
+            {compList}
+          </Row>
+        </Col>
+        <Col xs={5}>
+          <Row lg={1} className="g-2">
+            {list}
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
