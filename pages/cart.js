@@ -1,67 +1,60 @@
-import { Card, Col, Container, Row } from "react-bootstrap";
-
+import useSWR, { SWRConfig } from "swr";
+import { API, fetcher } from "../global/global";
+import { useRouter } from "next/router";
+import Header from "../components/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useEffect, useState } from "react";
+import Footer from "../components/Footer";
 
-export default function CartPage() {
+export async function getServerSideProps() {
+  try {
+    const repoInfo = await fetcher(API);
+
+    return {
+      props: {
+        fallback: {
+          [API]: repoInfo,
+        },
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+}
+
+function Repo({ lang }) {
+  const router = useRouter();
+  const {
+    data: { productStorage },
+  } = useSWR(API, fetcher, {
+    refreshInterval: 1000,
+  });
+
   return (
-    <div>
-      <Container fluid>
-        <Row>
-          <Col md={3}></Col>
-          <Col md={9}>
-            <Row xs={1} md={1} xl={4} className="g-2 d-none d-lg-flex">
-              <Col>
-                <Card border="dark">
-                  <Card.Body>
-                    <Card.Title>Card title</Card.Title>
-                    <Card.Text>
-                      This is a longer card with supporting text below as a
-                      natural lead-in to additional content. <br /> This content
-                      is a little bit longer.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col>
-                <Card>
-                  <Card.Body>
-                    <Card.Title>Card title</Card.Title>
-                    <Card.Text>
-                      This is a longer card with supporting text below as a
-                      natural lead-in to additional content. This content is a
-                      little bit longer.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col>
-                <Card>
-                  <Card.Body>
-                    <Card.Title>Card title</Card.Title>
-                    <Card.Text>
-                      This is a longer card with supporting text below as a
-                      natural lead-in to additional content. This content is a
-                      little bit longer.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col>
-                <Card>
-                  <Card.Body>
-                    <Card.Title>Card title</Card.Title>
-                    <Card.Text>
-                      This is a longer card with supporting text below as a
-                      natural lead-in to additional content. This content is a
-                      little bit longer.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+    <>
+      <div></div>
+    </>
+  );
+}
+
+export default function CartPage({ fallback }) {
+  const [lang, setLang] = useState("hu");
+
+  useEffect(() => {
+    setLang(localStorage.getItem("lang") ?? "hu");
+    // setTheme(localStorage.getItem("theme") ?? "light");
+  }, []);
+
+  return (
+    <SWRConfig value={{ fallback }}>
+      <Header lang={lang} />
+      <Repo />
+      <Footer lang={lang} />
+    </SWRConfig>
   );
 }

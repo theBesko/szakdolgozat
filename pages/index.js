@@ -24,7 +24,9 @@ export async function getServerSideProps() {
       props: {
         fallback: {
           [API]: repoInfo,
-          pages: Math.ceil(numberOfProductsOnSale(repoInfo.productStorage) / 2),
+          pages: Math.ceil(
+            numberOfProductsOnSale(repoInfo.productStorage) / 20
+          ),
         },
       },
     };
@@ -48,7 +50,7 @@ function Repo({ lang }) {
   const router = useRouter();
   const page = parseInt(router.query.page ?? 1);
   const sortedProducts = loadAndSortProducts("price", "ASC", productStorage);
-  const renderProducts = renderProductsJSX(page, 2, sortedProducts);
+  const renderProducts = renderProductsJSX(page, 20, sortedProducts);
 
   return (
     <Container fluid>

@@ -115,6 +115,30 @@ function selectPSU(obj, { category, productStorage }, fnList, fnComp) {
   fnList(renderList);
 }
 
+function selectRAM(obj, { category, productStorage }, fnList, fnComp) {
+  const renderList = [];
+  const component = "RAM";
+
+  for (const product in category[component]) {
+    if (
+      parseInt(productStorage[[obj.Motherboard]].ram_type) >=
+      parseInt(productStorage[category[component][product]].ram_type)
+    )
+      renderList.push(
+        <ListE
+          com={component}
+          p_id={category[component][product]}
+          fn1={fnList}
+          fn2={fnComp}
+          key={`${component}_${product}`}
+          p={productStorage[category[component][product]]}
+        />
+      );
+  }
+
+  fnList(renderList);
+}
+
 function selectCPUAfterMotherboard(
   obj,
   { category, productStorage },
@@ -284,6 +308,8 @@ function Repo() {
     console.log(comps);
   };
 
+  const [order, setOrder] = useState([]);
+
   const compList = [
     <Col
       key="CPU"
@@ -318,34 +344,68 @@ function Repo() {
     <Col
       key="GPU"
       onClick={() => {
-        selectFirstComponent("GPU", data, listComps, setCom);
+        if (Object.keys(comps).length > 1)
+          selectFirstComponent("GPU", data, listComps, setCom);
       }}
     >
       <BuilderComponentItem
+        forbidden={Object.keys(comps).length < 2}
         component="GPU"
         chosen={data.productStorage[comps.GPU]?.name ?? ""}
       />
     </Col>,
-    <Col key="RAM">
+    <Col
+      key="RAM"
+      onClick={() => {
+        if (
+          Object.keys(comps).includes("Motherboard") &&
+          Object.keys(comps).length > 1
+        ) {
+          selectRAM(comps, data, listComps, setCom);
+        }
+      }}
+    >
       <BuilderComponentItem
+        forbidden={Object.keys(comps).length < 2}
         component="RAM"
         chosen={data.productStorage[comps.RAM]?.name ?? ""}
       />
     </Col>,
-    <Col key="Cooler">
+    <Col
+      key="Cooler"
+      onClick={() => {
+        if (Object.keys(comps).length > 1)
+          selectFirstComponent("CPU_Cooler", data, listComps, setCom);
+      }}
+    >
       <BuilderComponentItem
+        forbidden={Object.keys(comps).length < 2}
         component="Cooler"
         chosen={data.productStorage[comps.CPU_Cooler]?.name ?? ""}
       />
     </Col>,
-    <Col key="SSD">
+    <Col
+      key="SSD"
+      onClick={() => {
+        if (Object.keys(comps).length > 1)
+          selectFirstComponent("SSD", data, listComps, setCom);
+      }}
+    >
       <BuilderComponentItem
+        forbidden={Object.keys(comps).length < 2}
         component="SSD"
         chosen={data.productStorage[comps.SSD]?.name ?? ""}
       />
     </Col>,
-    <Col key="HDD">
+    <Col
+      key="HDD"
+      onClick={() => {
+        if (Object.keys(comps).length > 1)
+          selectFirstComponent("HDD", data, listComps, setCom);
+      }}
+    >
       <BuilderComponentItem
+        forbidden={Object.keys(comps).length < 2}
         component="HDD"
         chosen={data.productStorage[comps.HDD]?.name ?? ""}
       />
@@ -353,39 +413,68 @@ function Repo() {
     <Col
       key="PSU"
       onClick={() => {
-        if (Object.keys(comps).includes("GPU")) {
+        if (
+          Object.keys(comps).includes("GPU") &&
+          Object.keys(comps).length > 6
+        ) {
           selectPSU(comps, data, listComps, setCom);
         }
       }}
     >
       <BuilderComponentItem
+        forbidden={Object.keys(comps).length < 7}
         component="PSU"
         chosen={data.productStorage[comps.PSU]?.name ?? ""}
       />
     </Col>,
-    <Col key="Case">
+    <Col
+      key="Case"
+      onClick={() => {
+        if (Object.keys(comps).length > 6)
+          selectFirstComponent("Case", data, listComps, setCom);
+      }}
+    >
       <BuilderComponentItem
+        forbidden={Object.keys(comps).length < 7}
         component="Case"
         chosen={data.productStorage[comps.Case]?.name ?? ""}
       />
     </Col>,
   ];
 
+  let finalPrice = 0;
+
+  for (const c in comps) {
+    finalPrice += parseInt(data.productStorage[comps[c]].price);
+  }
+
+  let rsBtn;
+
+  const restart = () => {
+    setComps({});
+  };
+
   return (
-    <Container fluid>
-      <Row>
-        <Col xs={5}>
-          <Row lg={1} className="g-2">
-            {compList}
-          </Row>
-        </Col>
-        <Col xs={5}>
-          <Row lg={1} className="g-2">
-            {list}
-          </Row>
-        </Col>
-      </Row>
-    </Container>
+    <div style={{ marginBottom: 100, marginTop: 20 }}>
+      <div>
+        <Button onClick={restart}>Restart</Button>
+        <h1 style={{ textAlign: "center" }}>{finalPrice} Ft</h1>
+      </div>
+      <Container fluid>
+        <Row>
+          <Col xs={6}>
+            <Row lg={1} className="g-2">
+              {compList}
+            </Row>
+          </Col>
+          <Col xs={6}>
+            <Row lg={1} className="g-2">
+              {list}
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
 

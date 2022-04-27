@@ -1,0 +1,10 @@
+.forbidden{
+    background-color: lightgray;
+    :hover{
+        cursor:default;
+    }
+}
+
+.available:hover{
+    cursor:pointer
+}

@@ -7,6 +7,7 @@ import {
   FormControl,
   Button,
 } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import { useRouter } from "next/dist/client/router";
 
@@ -33,26 +34,30 @@ export default function Header(props) {
           <Nav.Link href="/builder">
             {props.lang === "hu" ? "PC Építő" : "PC Builder"}
           </Nav.Link>
+          <Nav.Link href="/">
+            {props.lang === "hu" ? "Áruház" : "Store"}
+          </Nav.Link>
+        </Nav>
+        <Form>
+          <FormControl
+            className="me-5"
+            autoFocus
+            type="search"
+            placeholder={props.lang === "hu" ? "Keresés..." : "Search..."}
+            aria-label="Search"
+            defaultValue={router.query.value}
+            onChange={(e) => {
+              search(e.target.value);
+            }}
+          />
+        </Form>
+        <Nav>
           <Nav.Link href="/account">
             {props.lang === "hu" ? "Fiók" : "Account"}
           </Nav.Link>
           <Nav.Link href="/cart">
             {props.lang === "hu" ? "Kosár" : "Cart"}
           </Nav.Link>
-        </Nav>
-        <Nav className="me-5">
-          <Form className="d-flex">
-            <FormControl
-              autoFocus
-              type="search"
-              placeholder={props.lang === "hu" ? "Keresés..." : "Search..."}
-              aria-label="Search"
-              defaultValue={router.query.value}
-              onChange={(e) => {
-                search(e.target.value);
-              }}
-            />
-          </Form>
         </Nav>
       </Container>
     </Navbar>

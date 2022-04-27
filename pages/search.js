@@ -1,19 +1,10 @@
 import useSWR, { SWRConfig } from "swr";
-import {
-  API,
-  fetcher,
-  loadAndSortProducts,
-  renderProductsJSX,
-} from "../global/global";
+import { API, fetcher } from "../global/global";
 import { useRouter } from "next/router";
 import Header from "../components/Header";
-import ComponentListDropdown from "../components/ComponentListDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
-import classes from "../styles/category.module.scss";
 import { useEffect, useState } from "react";
-import CategoryMenuDesktop from "../components/CategoryMenuDesktop";
 import Footer from "../components/Footer";
-import Pagination from "../components/Pagination";
 
 export async function getServerSideProps() {
   try {
@@ -48,14 +39,12 @@ function Repo({ lang }) {
 
   for (const product in productStorage) {
     if (product.includes(router.query.value))
-      s.push(<h1 key={`p_${product}`}>{product}</h1>);
+      s.push(<h1 key={`p_${product}`}>{productStorage[product].name}</h1>);
   }
 
   return (
     <>
-      <div>
-        <h1>{s}</h1>
-      </div>
+      <div>{s}</div>
     </>
   );
 }
